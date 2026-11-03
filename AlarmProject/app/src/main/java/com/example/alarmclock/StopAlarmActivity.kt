@@ -1,0 +1,39 @@
+package com.example.alarmlock
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class StopAlarmActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_stop_alarm)
+
+        val prefs = getSharedPreferences("alarm_prefs", MODE_PRIVATE)
+        val et = findViewById<EditText>(R.id.etStopPin)
+        val btn = findViewById<Button>(R.id.btnStopConfirm)
+
+        btn.setOnClickListener {
+            if (et.text.toString() == prefs.getString("pin", null)) {
+                prefs.edit().putBoolean("armed", false).apply()
+                stopService(Intent(this, AlarmService::class.java))
+                finishAndRemoveTask()
+            } else {
+                et.error = "PIN salah"
+                et.text.clear()
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        Toast.makeText(
+            this, "Masukkan PIN untuk mematikan alarm",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+}
