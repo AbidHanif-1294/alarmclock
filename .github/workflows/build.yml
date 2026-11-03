@@ -10,6 +10,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    # Tambahkan dua baris di bawah ini
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    # Sampai sini
     - name: Build Debug APK
       run: ./gradlew assembleDebug
     - name: Upload APK
